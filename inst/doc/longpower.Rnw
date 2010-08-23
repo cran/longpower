@@ -15,7 +15,7 @@
 Division of Biostatistics and Bioinformatics\\
 University of California, San Diego}
 \begin{document}
-\SweaveOpts{engine=R,eps=FALSE,pdf=TRUE,strip.white=TRUE}
+\SweaveOpts{engine=R,eps=FALSE,pdf=TRUE,strip.white=true}
 \SweaveOpts{include=FALSE}
 \setkeys{Gin}{width=\textwidth}
 
