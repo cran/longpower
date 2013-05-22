@@ -1,6 +1,5 @@
 \name{power.mmrm}
 \alias{power.mmrm}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Linear mixed model sample size calculations.
 }
@@ -12,7 +11,6 @@ power.mmrm(N = NULL, Ra, ra, sigmaa, Rb = NULL, rb = NULL, sigmab = NULL, lambda
     delta = NULL, sig.level = 0.05, power = NULL, 
     alternative = c("two.sided", "one.sided"))
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{N}{
   total sample size
@@ -59,16 +57,12 @@ See Lu, Luo, & Chen (2008).
 The number of subject required per arm to attain the specified \code{power} given \code{sig.level} and the other parameter estimates.
 }
 \references{
-Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. \emph{International Journal of Biostatistics}, 4, (1)
+Lu, K., Luo, X., Chen, P.-Y. (2008) Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. \emph{International Journal of Biostatistics}, 4, (1)
 }
 \author{
 Michael C. Donohue
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 \code{\link{power.mmrm.ar1}}, \code{\link{lmmpower}}, \code{\link{diggle.linear.power}}
 }
 \examples{
@@ -101,6 +95,6 @@ power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, delta = 0.5, lambda = 2)
 power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, power = 0.80, lambda = 2)
 }
 \keyword{ power }
-\keyword{ sample size }% __ONLY ONE__ keyword per line
+\keyword{ sample size }
 \keyword{ mixed effects }
 \keyword{ random effects }
