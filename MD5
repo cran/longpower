@@ -1,9 +1,9 @@
-ccd5c8ca87bdf1a19b8566bd7af6f2f5 *DESCRIPTION
+34973b15cb074042f94908df65fe205f *DESCRIPTION
 dc5f34a9f73afe8d1c1288e44e0b4600 *NAMESPACE
 7f4eef9c31b9300509cbba43c13a0b47 *R/diggle.linear.power.R
 d80d6767bf2d46b937ee34e6cfc2e738 *R/edland.linear.power.R
 4b8bfb89c65279b4146be9b8a209f978 *R/liu.liang.linear.power.R
-f50443d005e49280c49eac5451f21047 *R/lmmpower.R
+380bab007bbfc58dbba90be45bbe3f4a *R/lmmpower.R
 fbce64337f1ec61825918b46422a12d1 *R/power_mmrm.R
 ad2ff17dd4d658a06f2a4d5d5220373a *R/print.power.longtest.R
 c22d0ed184a704b273fa0314cabaee2a *README.markdown

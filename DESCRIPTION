@@ -1,8 +1,8 @@
 Package: longpower
 Type: Package
 Title: Sample size calculations for longitudinal data
-Version: 1.0-8
-Date: 2013-05-28
+Version: 1.0-9
+Date: 2013-06-17
 Author: Michael C. Donohue, Anthony C. Gamst, Steven D. Edland
 Maintainer: Michael C. Donohue <mdonohue@ucsd.edu>
 Description: The longpower package contains functions for computing
@@ -22,7 +22,7 @@ Suggests: knitr
 LazyLoad: yes
 VignetteBuilder: knitr
 URL: http://mdonohue.bitbucket.org/longpower
-Packaged: 2013-05-28 15:52:24 UTC; mdonohue
+Packaged: 2013-06-17 15:24:20 UTC; mdonohue
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-05-28 22:39:06
+Date/Publication: 2013-06-17 18:18:47
