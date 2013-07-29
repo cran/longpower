@@ -1,18 +1,14 @@
-
-## @knitr knitropts, results = 'hide', echo = FALSE, message = FALSE
+## ----knitropts, results = 'hide', echo = FALSE, message = FALSE----------
 library(knitr)
 opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, tidy = FALSE, comment = NA)
 
-
-## @knitr echo=TRUE, results='hide'
+## ----echo=TRUE, results='hide'-------------------------------------------
 library(longpower)
 
-
-## @knitr echo=TRUE
+## ----echo=TRUE-----------------------------------------------------------
 liu.liang.linear.power
 
-
-## @knitr 
+## ------------------------------------------------------------------------
 n = 3
 t = c(0,2,5)
 u = list(u1 = t, u2 = rep(0,n))
@@ -33,8 +29,7 @@ colnames(tab) = paste("sigma2 =", sigma2)
 rownames(tab) = paste("rho =", rho)
 tab
 
-
-## @knitr 
+## ------------------------------------------------------------------------
 # var of random intercept
 sig2.i = 55
 # var of random slope
@@ -58,18 +53,15 @@ v = list(v1 = cbind(1,1,rep(0,n)),
 
 liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, power=0.80)
 
-
-## @knitr 
+## ------------------------------------------------------------------------
 x = (rbind(1,t)%*%solve(R)%*%cbind(1,t))[2,2]
 x*2*(qnorm(1-0.05/2) + qnorm(0.80))^2/1.5^2
 
-
-## @knitr 
+## ------------------------------------------------------------------------
 x = solve(rbind(1,t)%*%solve(R)%*%cbind(1,t))[2,2]
 x*2*(qnorm(1-0.05/2) + qnorm(0.80))^2/1.5^2
 
-
-## @knitr 
+## ------------------------------------------------------------------------
 X = t(v[[1]])%*%solve(R)%*%v[[1]] + 
     t(v[[2]])%*%solve(R)%*%v[[2]]
 
@@ -77,5 +69,4 @@ Sigma1 = ((t(u[[1]])%*%solve(R)%*%t -
            t(u[[1]])%*%solve(R)%*%v[[1]]%*%solve(X)%*%t(v[[1]])%*%solve(R)%*%t)/2)
 
 (qnorm(1-0.05/2) + qnorm(0.80))^2/(Sigma1*(1.5)^2)
-
 

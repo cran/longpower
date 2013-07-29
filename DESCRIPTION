@@ -1,7 +1,7 @@
 Package: longpower
 Type: Package
 Title: Sample size calculations for longitudinal data
-Version: 1.0-10
+Version: 1.0-11
 Date: 2013-07-29
 Author: Michael C. Donohue, Anthony C. Gamst, Steven D. Edland
 Maintainer: Michael C. Donohue <mdonohue@ucsd.edu>
@@ -21,11 +21,11 @@ Depends: R (>= 3.0.0), Matrix, lme4 (>= 1.0), nlme, methods
 Suggests: knitr, gee
 LazyLoad: yes
 VignetteBuilder: knitr
-URL: http://mdonohue.bitbucket.org/longpower
+URL: https://bitbucket.org/mdonohue/longpower
 Collate: 'diggle.linear.power.R' 'edland.linear.power.R'
         'liu.liang.linear.power.R' 'lmmpower.R' 'power_mmrm.R'
         'print.power.longtest.R'
-Packaged: 2013-09-14 19:39:39 UTC; mdonohue
+Packaged: 2015-01-16 01:46:52 UTC; mdonohue
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-09-21 10:00:47
+Date/Publication: 2015-01-16 06:42:39
