@@ -1,22 +1,22 @@
-#' Linear mixed model sample size calculations.
+#' Sample size calculations for difference in slopes between two groups.
 #' 
-#' This function performs the sample size calculation for a linear mixed model.
-#' See Diggle et al (2002) for parameter definitions and other details.
+#' This function performs the sample size calculation for difference in slopes 
+#' between two groups. See Diggle et al (2002) for parameter definitions 
+#' and other details.
 #' 
-#' The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same
-#' length and sorted with respect to each other. See Diggle, et al (1997) and
-#' package vignette for more details.
+#' See Diggle, et al (1997) and package vignette for more details.
 #' 
 #' @param n sample size per group
 #' @param delta group difference in slopes
 #' @param t the observation times
-#' @param sigma2 the marginal model (GEE) scale parameter
+#' @param sigma2 the residual variance
 #' @param R the working correlation matrix (or variance-covariance matrix if
 #' \code{sigma2} is 1). If \code{R} is a scalar, an exchangeable working
 #' correlation matrix will be assumed.
 #' @param sig.level Type I error
 #' @param power power
 #' @param alternative one- or two-sided test
+#' @param tol	numerical tolerance used in root finding.
 #' @return The number of subject required per arm to attain the specified
 #' \code{power} given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue, Steven D. Edland
@@ -70,11 +70,14 @@
 #' 
 #' diggle.linear.power(d=1.5, t=t, R=R, sig.level=0.05, power=0.80)
 #' 
+#' @importFrom stats coef qnorm uniroot
+#' 
 #' @export diggle.linear.power
 diggle.linear.power <-
 function(n=NULL, delta=NULL, t=NULL, sigma2=1, R=NULL, 
          sig.level=0.05, power=NULL,
-         alternative=c("two.sided", "one.sided"))
+         alternative=c("two.sided", "one.sided"),
+         tol = .Machine$double.eps^2)
 {
   if (sum(sapply(list(n, delta, sigma2, power, sig.level), is.null)) != 1) 
       stop("exactly one of 'delta', 'sigma2', 'power', and 'sig.level' must be NULL")
@@ -92,19 +95,22 @@ function(n=NULL, delta=NULL, t=NULL, sigma2=1, R=NULL,
        qnorm(1-power))^2*xi/delta^2
   })
   
-  if (is.null(sig.level)) 
-      sig.level <- uniroot(function(sig.level) eval(n.body) - 
-          n, c(1e-10, 1 - 1e-10))$root
+  if(is.null(n))
+    n <- eval(n.body)
+  else if (is.null(sig.level)) 
+    sig.level <- uniroot(function(sig.level) eval(n.body) - n, 
+      c(1e-10, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(power)) 
-      power <- uniroot(function(power) eval(n.body) - 
-          n, c(1e-3, 1 - 1e-10))$root
+    power <- uniroot(function(power) eval(n.body) - n, 
+      c(1e-3, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(delta)) 
-      delta <- uniroot(function(delta) eval(n.body) - 
-          n, c(1e-10, 1e5))$root
+    delta <- uniroot(function(delta) eval(n.body) - n, 
+      sqrt(sigma2) * c(1e-7, 1e+7), tol=tol, extendInt = "downX")$root
   else if (is.null(sigma2)) 
-      sigma2 <- uniroot(function(sigma2) eval(n.body) - 
-          n, c(1e-10, 1e5))$root
-  n <- eval(n.body)
+    sigma2 <- uniroot(function(sigma2) eval(n.body) - n, 
+      delta * c(1e-7, 1e+7), tol=tol, extendInt = "yes")$root
+  else # Shouldn't happen
+    stop("internal error", domain = NA)
 
   METHOD <- "Longitudinal linear model slope power calculation (Diggle et al 2002, page 29)"
   structure(list(n = n, delta = delta, sigma2 = sigma2, R = R, sig.level = sig.level, 

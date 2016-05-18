@@ -14,6 +14,7 @@
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
+#' @param tol	numerical tolerance used in root finding.
 #' @return The number of subject required per arm to attain the specified
 #' \code{power} given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue, Steven D. Edland
@@ -51,9 +52,11 @@
 #' 
 #' edland.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, sig.level=0.05, power = 0.80)
 #' 
+#' @export edland.linear.power
 edland.linear.power <- function(n = NULL, delta = NULL, t = NULL, sig2.s = 0, sig2.e = 1, 
-         sig.level=0.05, power=NULL,
-         alternative = c("two.sided", "one.sided"))
+   sig.level=0.05, power=NULL,
+   alternative = c("two.sided", "one.sided"),
+   tol = .Machine$double.eps^2)
 {
   if (sum(sapply(list(n, delta, sig2.s, sig2.e, power, sig.level), is.null)) != 1) 
       stop("exactly one of 'n', 'delta', 'sig2.s', 'sig2.e', 'power', and 'sig.level' must be NULL")
@@ -67,22 +70,26 @@ edland.linear.power <- function(n = NULL, delta = NULL, t = NULL, sig2.s = 0, si
       (sig2.s + sig2.e/sum((t - mean(t))^2)) / delta^2
   })
   
-  if (is.null(sig.level)) 
-      sig.level <- uniroot(function(sig.level) eval(n.body) - 
-          n, c(1e-10, 1 - 1e-10))$root
+
+  if(is.null(n))
+    n <- eval(n.body)
+  else if (is.null(sig.level)) 
+    sig.level <- uniroot(function(sig.level) eval(n.body) - n, 
+      c(1e-10, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(power)) 
-      power <- uniroot(function(power) eval(n.body) - 
-          n, c(1e-3, 1 - 1e-10))$root
+    power <- uniroot(function(power) eval(n.body) - n, 
+      c(1e-3, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(delta)) 
-      delta <- uniroot(function(delta) eval(n.body) - 
-          n, c(1e-10, 1e5))$root
+    delta <- uniroot(function(delta) eval(n.body) - n, 
+      sqrt(sig2.s + sig2.e/sum((t - mean(t))^2)) * c(1e-7, 1e+7), tol=tol, extendInt = "downX")$root
   else if (is.null(sig2.s)) 
-      sig2.s <- uniroot(function(sig2.s) eval(n.body) - 
-          n, c(1e-10, 1e5))$root
+    sig2.s <- uniroot(function(sig2.s) eval(n.body) - n, 
+      delta * c(1e-7, 1e+7), tol=tol, extendInt = "yes")$root
   else if (is.null(sig2.e)) 
-      sig2.e <- uniroot(function(sig2.e) eval(n.body) - 
-          n, c(1e-10, 1e5))$root
-  n <- eval(n.body)
+    sig2.e <- uniroot(function(sig2.e) eval(n.body) - n, 
+      delta * c(1e-7, 1e+7), tol=tol, extendInt = "yes")$root
+  else # Shouldn't happen
+    stop("internal error", domain = NA)
 
   METHOD <- "Power for longitudinal linear model with random slope (Edland, 2009)"
   structure(list(n = n, delta = delta, sig2.s = sig2.s, sig2.e = sig2.e, sig.level = sig.level, 
