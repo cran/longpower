@@ -1,8 +1,8 @@
 Package: longpower
 Type: Package
 Title: Sample Size Calculations for Longitudinal Data
-Version: 1.0-15
-Date: 2016-05-16
+Version: 1.0-16
+Date: 2016-07-24
 Author: Michael C. Donohue, Anthony C. Gamst, Steven D. Edland
 Maintainer: Michael C. Donohue <mdonohue@usc.edu>
 Description: The longpower package contains functions for computing
@@ -27,6 +27,6 @@ Collate: 'longpower-package.R' 'diggle.linear.power.R'
         'power_mmrm.R' 'print.power.longtest.R'
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2016-05-16 23:30:00 UTC; mdonohue
+Packaged: 2016-07-24 16:39:19 UTC; mdonohue
 Repository: CRAN
-Date/Publication: 2016-05-18 01:31:14
+Date/Publication: 2016-07-25 20:36:27
