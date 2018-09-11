@@ -20,3 +20,8 @@ importFrom(nlme,getVarCov)
 importFrom(stats,coef)
 importFrom(stats,qnorm)
 importFrom(stats,uniroot)
+
+S3method(lmmpower, default)
+S3method(lmmpower, gee)
+S3method(lmmpower, lme)
+S3method(lmmpower, numeric)
