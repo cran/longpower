@@ -1,10 +1,11 @@
 Package: longpower
 Type: Package
 Title: Sample Size Calculations for Longitudinal Data
-Version: 1.0-19
-Date: 2019-03-06
-Author: Michael C. Donohue
-Maintainer: Michael C. Donohue <mdonohue@usc.edu>
+Version: 1.0-21
+Authors@R: c(
+  person(c("Michael", "C."), "Donohue", email = "mdonohue@usc.edu", role = c("aut", "cre")),
+  person(c("Steve", "D."), "Edland", email = "sedland@health.ucsd.edu", role = c("ctb")))
+Date: 2020-04-21
 Description: Compute power and sample size for linear models of longitudinal
     data. Supported models include mixed-effects models and models fit by
     generalized least squares and generalized estimating equations. Relevant
@@ -20,8 +21,12 @@ URL: https://github.com/mcdonohue/longpower
 Collate: 'longpower-package.R' 'diggle.linear.power.R'
         'edland.linear.power.R' 'liu.liang.linear.power.R' 'lmmpower.R'
         'power_mmrm.R' 'print.power.longtest.R'
-RoxygenNote: 6.1.1
+Encoding: UTF-8
+RoxygenNote: 7.1.0
 NeedsCompilation: no
-Packaged: 2019-03-07 16:40:27 UTC; mdonohue
+Packaged: 2020-04-21 14:32:57 UTC; mdonohue
+Author: Michael C. Donohue [aut, cre],
+  Steve D. Edland [ctb]
+Maintainer: Michael C. Donohue <mdonohue@usc.edu>
 Repository: CRAN
-Date/Publication: 2019-03-07 17:10:04 UTC
+Date/Publication: 2020-04-21 22:00:06 UTC

@@ -69,7 +69,7 @@
 #'          delta=delta, u=u, v=v,
 #'          sigma2=1,
 #'          R=rho, alternative="one.sided",
-#'          power=0.80)$N/2)}))
+#'          power=0.80)$n[1])}))
 #' colnames(tab) = paste("delta =", delta)
 #' rownames(tab) = paste("rho =", rho)
 #' tab
@@ -221,6 +221,6 @@ liu.liang.linear.power <- function(N=NULL, delta=NULL, u=NULL, v=NULL, sigma2=1,
   structure(list(N = N, n = N*Pi, delta = delta, sigma2 = sigma2, 
     sig.level = sig.level, power = power, alternative = alternative,
     R = R,
-    note = "N is total sample size and n is sample size in each group.",
+    note = "N is *total* sample size and n is sample size in *each* group",
     method = METHOD), class = "power.longtest")
 }

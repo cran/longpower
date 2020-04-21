@@ -4,10 +4,17 @@
 \alias{diggle.linear.power}
 \title{Sample size calculations for difference in slopes between two groups.}
 \usage{
-diggle.linear.power(n = NULL, delta = NULL, t = NULL, sigma2 = 1,
-  R = NULL, sig.level = 0.05, power = NULL,
+diggle.linear.power(
+  n = NULL,
+  delta = NULL,
+  t = NULL,
+  sigma2 = 1,
+  R = NULL,
+  sig.level = 0.05,
+  power = NULL,
   alternative = c("two.sided", "one.sided"),
-  tol = .Machine$double.eps^2)
+  tol = .Machine$double.eps^2
+)
 }
 \arguments{
 \item{n}{sample size per group}
@@ -61,7 +68,7 @@ tab = outer(rho, sigma2,
           sigma2=sigma2,
           R=rho,
           alternative="one.sided",
-          power = 0.80)$n)}))
+          power = 0.80)$n[1])}))
 colnames(tab) = paste("sigma2 =", sigma2)
 rownames(tab) = paste("rho =", rho)
 tab

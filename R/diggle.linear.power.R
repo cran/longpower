@@ -44,7 +44,7 @@
 #'           sigma2=sigma2,
 #'           R=rho,
 #'           alternative="one.sided",
-#'           power = 0.80)$n)}))
+#'           power = 0.80)$n[1])}))
 #' colnames(tab) = paste("sigma2 =", sigma2)
 #' rownames(tab) = paste("rho =", rho)
 #' tab
@@ -70,7 +70,7 @@
 #' 
 #' diggle.linear.power(d=1.5, t=t, R=R, sig.level=0.05, power=0.80)
 #' 
-#' @importFrom stats coef qnorm uniroot
+#' @importFrom stats coef qnorm pnorm uniroot
 #' 
 #' @export diggle.linear.power
 diggle.linear.power <-
@@ -113,8 +113,8 @@ function(n=NULL, delta=NULL, t=NULL, sigma2=1, R=NULL,
     stop("internal error", domain = NA)
 
   METHOD <- "Longitudinal linear model slope power calculation (Diggle et al 2002, page 29)"
-  structure(list(n = n, delta = delta, sigma2 = sigma2, R = R, sig.level = sig.level, 
+  structure(list(N=2*n, n = c(n,n), delta = delta, sigma2 = sigma2, R = R, sig.level = sig.level, 
         power = power, alternative = alternative, 
-        note = "n is number in *each* group",
+        note = "N is *total* sample size and n is sample size in *each* group",
         method = METHOD), class = "power.longtest")
 }

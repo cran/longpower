@@ -4,11 +4,20 @@
 \alias{liu.liang.linear.power}
 \title{Linear mixed model sample size calculations from Liu & Liang (1997).}
 \usage{
-liu.liang.linear.power(N = NULL, delta = NULL, u = NULL, v = NULL,
-  sigma2 = 1, R = NULL, R.list = NULL, sig.level = 0.05,
-  power = NULL, Pi = rep(1/length(u), length(u)),
+liu.liang.linear.power(
+  N = NULL,
+  delta = NULL,
+  u = NULL,
+  v = NULL,
+  sigma2 = 1,
+  R = NULL,
+  R.list = NULL,
+  sig.level = 0.05,
+  power = NULL,
+  Pi = rep(1/length(u), length(u)),
   alternative = c("two.sided", "one.sided"),
-  tol = .Machine$double.eps^2)
+  tol = .Machine$double.eps^2
+)
 }
 \arguments{
 \item{N}{The total sample size. This formula can accommodate unbalanced
@@ -90,7 +99,7 @@ tab = outer(rho, delta,
          delta=delta, u=u, v=v,
          sigma2=1,
          R=rho, alternative="one.sided",
-         power=0.80)$N/2)}))
+         power=0.80)$n[1])}))
 colnames(tab) = paste("delta =", delta)
 rownames(tab) = paste("rho =", rho)
 tab
