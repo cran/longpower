@@ -10,34 +10,47 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+<meta name="author" content="Michael C. Donohue" />
 
+<meta name="date" content="2021-04-19" />
 
-<title>Power calculations for longitudinal data</title>
+<title>Power for linear models of longitudinal data with applications to Alzheimer’s Disease Phase II study design</title>
 
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -46,9 +59,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -105,187 +118,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
 }
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
 }
-#TOC ul ul {
-margin-left: -2em;
+div.csl-indent {
+  margin-left: 2em;
 }
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
-
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; } 
-code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
 
 
 
@@ -297,9 +153,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Power calculations for longitudinal data</h1>
-
-
+<h1 class="title toc-ignore">Power for linear models of longitudinal data with applications to Alzheimer’s Disease Phase II study design</h1>
+<h4 class="author">Michael C. Donohue</h4>
+<h4 class="date">2021-04-19</h4>
 
 
 
@@ -317,7 +173,10 @@ Y_{ij} = \beta_{0A} + \beta_{1A}t_{ij} + \varepsilon_{ij},\quad i=1,\ldots,m; j=
 \]</span> and similarly for Group B. The null hypothesis is <span class="math inline">\(H_0: d=\beta_{1A} - \beta_{1B} = 0\)</span>. Under an exchangeable correlation structure <span class="math inline">\(\mathrm{var}(Y_{ij})=\mathrm{var}(\varepsilon_{ij})=\sigma^2\)</span> and <span class="math inline">\(\mathrm{corr}(Y_{ij},Y_{ik})=\mathrm{corr}(\varepsilon_{ij}, \varepsilon_{ik})=\rho\)</span>, for all subjects, <span class="math inline">\(i\)</span>, and time points <span class="math inline">\(j, k\)</span>.</p>
 <p>In the mixed effects framework we can assume a random intercept model which is equivalent to the GEE model with exchangeable correlation structure. In this case we believe <span class="math inline">\(\varepsilon_{ij} = \alpha_i + \varepsilon_{ij}^*\)</span>, where <span class="math inline">\(\alpha_i\)</span> is the random intercept term shared by all observations and <span class="math inline">\(\varepsilon_{ij}^*\)</span> are independent and identically distributed (iid) error terms. We see that <span class="math inline">\(\mathrm{var}(Y_{ij})=\mathrm{var}(\varepsilon_{ij})=\mathrm{var}(\alpha_i) + \mathrm{var}(\varepsilon_{ij}^*)\)</span> and <span class="math inline">\(\mathrm{corr}(Y_{ij},Y_{ik})=E[(\alpha_i + \varepsilon_{ij}^*)(\alpha_i + \varepsilon_{ik}^*)]/\sigma^2=\mathrm{var}(\alpha_i)/\sigma^2\)</span>. The variance of the random intercept, <span class="math inline">\(\mathrm{var}(\alpha_i)\)</span>, and the residual variance, <span class="math inline">\(\mathrm{var}(\varepsilon_{ij})\)</span>, are easily obtainable from the output of mixed effects fitting software so that one might fit a random effects model to pilot data to educate a power calculation using the GEE formula of . Assuming equal numbers in the placebo and active groups, a common visit schedule for all subjects (<span class="math inline">\(t_{ij} = t_{kj}\)</span> for all <span class="math inline">\(i,j,k\)</span>), and a random intercept model; the number of subjects per group is: <span class="math display">\[
 m = \frac{2(z_\alpha + z_Q)^2(\mathrm{var}(\alpha_i) + \mathrm{var}(\varepsilon_{ij}^*))^2(1-\mathrm{var}(\alpha_i)/\sigma^2)}{ns_x^2d^2}
-\]</span> where <span class="math inline">\(z_p\)</span> is the <span class="math inline">\(p\)</span>th standard normal quantile, <span class="math inline">\(Q\)</span> is <span class="math inline">\(1-P\)</span>, <span class="math inline">\(P\)</span> is the specified power, and <span class="math inline">\(s_x^2=n^{-1}\sum_j(t_{j}-\bar x)^2\)</span>. ## General correlation and random slope models</p>
+\]</span> where <span class="math inline">\(z_p\)</span> is the <span class="math inline">\(p\)</span>th standard normal quantile, <span class="math inline">\(Q\)</span> is <span class="math inline">\(1-P\)</span>, <span class="math inline">\(P\)</span> is the specified power, and <span class="math inline">\(s_x^2=n^{-1}\sum_j(t_{j}-\bar x)^2\)</span>.</p>
+</div>
+<div id="general-correlation-and-random-slope-models" class="section level2">
+<h2>General correlation and random slope models</h2>
 <p>The random intercept model is not equipped to handle variations in the rate of change from subject to subject. In many diseases, such as Alzheimer’s disease, the rate of improvement or decline will vary greatly within the treatment group, regardless of treatment. This variation can be modeled with a random slope term. That is, we assume: <span class="math display">\[
 Y_{ij} = \beta_{0A} + \beta_{1A}t_{ij} + \alpha_{0i} + \alpha_{1i}t_{ij} + \varepsilon_{ij}^*,
 \]</span> where we use <span class="math inline">\(\varepsilon_{ij}^*\)</span> again to denote iid error and reserve <span class="math inline">\(\varepsilon_{ij}\)</span> for possibly correlated error. If we derive the correlation structure of <span class="math inline">\(\varepsilon_{ij}=\alpha_{0i} + \alpha_{1i}t_{ij} + \varepsilon_{ij}^*\)</span>, which is necessary in order to use GEE-based sample size formulas, we find that we no longer have an exchangeable correlation structure. In fact <span class="math inline">\(\mathrm{var}(Y_{ij})=\mathrm{var}(\varepsilon_{ij})=\mathrm{var}(\alpha_{0i})+t_{ij}^2\mathrm{var}(\alpha_{1i}) + 2t_{ij}\mathrm{cov}(\alpha_{0i},\alpha_{1i}) +\mathrm{var}(\varepsilon_{ij}^*)\)</span> and <span class="math inline">\(\mathrm{cov}(Y_{ij},Y_{ik})=\mathrm{cov}(\varepsilon_{ij},\varepsilon_{ik})=\mathrm{var}(\alpha_{0i})+t_{ij}t_{ik}\mathrm{var}(\alpha_{1i}) + (t_{ij}+t_{ik})\mathrm{cov}(\alpha_{0i},\alpha_{1i})\)</span>. For the common visit schedule case, the covariance matrix for the vector of correlated errors, <span class="math inline">\(\mathbf{\varepsilon_i}=(\varepsilon_{i1},\ldots,\varepsilon_{in})&#39;\)</span>, is of the form: <span class="math display">\[
@@ -329,8 +188,8 @@ Y_{ij} = \mathbf{x}_{ij}&#39;\mathbf{\psi} + \mathbf{z}_{ij}&#39;\mathbf{\lambda
 Y_{ij}=\beta_0 + \beta_1\{{\rm Group}_{i}=A\} + \beta_2t_{ij} + \beta_3t_{ij}\{{\rm Group}_{i}=A\}.
 \]</span> That is, the parameter of interest for the interaction of treatment and time is <span class="math inline">\(\psi = \beta_3\)</span> and nuisance parameter is <span class="math inline">\(\mathbf{\lambda} = (\beta_0,\beta_1,\beta_2)&#39;\)</span>. The covariates are distributed as <span class="math inline">\(\mathbf{x}_{i} = \mathbf{t}= (t_1, \ldots, t_n)&#39;\)</span> and <span class="math inline">\(\mathbf{z}_j = [\mathbf{1}\, \mathbf{1}\, \mathbf{t}]_{n\times3}\)</span> with probability 1/2 (Group A); and <span class="math inline">\(\mathbf{x}_{i} = \mathbf{0}\)</span> and <span class="math inline">\(\mathbf{z}_j = [\mathbf{1}\, \mathbf{0}\, \mathbf{t}]_{n\times3}\)</span> with probability 1/2 (Group B).</p>
 <p>The Liu and Liang’s formula for linear models can be coded In R as:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(longpower)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">liu.liang.linear.power</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(longpower)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>liu.liang.linear.power</span></code></pre></div>
 <pre><code>function (N = NULL, delta = NULL, u = NULL, v = NULL, sigma2 = 1, 
     R = NULL, R.list = NULL, sig.level = 0.05, power = NULL, 
     Pi = rep(1/length(u), length(u)), alternative = c(&quot;two.sided&quot;, 
@@ -402,71 +261,71 @@ Y_{ij}=\beta_0 + \beta_1\{{\rm Group}_{i}=A\} + \beta_2t_{ij} + \beta_3t_{ij}\{{
         R = R, note = &quot;N is *total* sample size and n is sample size in *each* group&quot;, 
         method = METHOD), class = &quot;power.longtest&quot;)
 }
-&lt;bytecode: 0x7feada74d848&gt;
+&lt;bytecode: 0x7fed9cbd0db0&gt;
 &lt;environment: namespace:longpower&gt;</code></pre>
 <p>The parameters include , the effect size (possibly vector); , the list of covariate vectors or matrices associated with the parameter of interest; , the respective list of covariate vectors or matrices associated with the nuisance parameter; , the error variance; , the correlation structure; and  the proportion of covariates of each type (, , and  are expected to be the same length and sorted with respect to each other).</p>
 <p>For example, we can reproduce the table of sample sizes (per group) on page 29 of  for the given exchangeable correlations with <span class="math inline">\(\mathbf{t} = (0,2,5)&#39;\)</span>, <span class="math inline">\(\alpha=0.05\)</span>, power=0.80, and <span class="math inline">\(d=0.5\)</span> via the  function:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">n =<span class="st"> </span><span class="dv">3</span> <span class="co"># visits</span></a>
-<a class="sourceLine" id="cb4-2" title="2">t =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb4-3" title="3">rho =<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb4-4" title="4">sigma2 =<span class="st"> </span><span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>)</a>
-<a class="sourceLine" id="cb4-5" title="5">tab.diggle =<span class="st"> </span><span class="kw">outer</span>(rho, sigma2, </a>
-<a class="sourceLine" id="cb4-6" title="6">      <span class="kw">Vectorize</span>(<span class="cf">function</span>(rho, sigma2){</a>
-<a class="sourceLine" id="cb4-7" title="7">        <span class="kw">ceiling</span>(<span class="kw">diggle.linear.power</span>(</a>
-<a class="sourceLine" id="cb4-8" title="8">          <span class="dt">d=</span><span class="fl">0.5</span>,</a>
-<a class="sourceLine" id="cb4-9" title="9">          <span class="dt">t=</span>t,</a>
-<a class="sourceLine" id="cb4-10" title="10">          <span class="dt">sigma2=</span>sigma2,</a>
-<a class="sourceLine" id="cb4-11" title="11">          <span class="dt">R=</span>rho,</a>
-<a class="sourceLine" id="cb4-12" title="12">          <span class="dt">alternative=</span><span class="st">&quot;one.sided&quot;</span>,</a>
-<a class="sourceLine" id="cb4-13" title="13">          <span class="dt">power=</span><span class="fl">0.80</span>)<span class="op">$</span>n[<span class="dv">1</span>])}))</a>
-<a class="sourceLine" id="cb4-14" title="14"><span class="kw">colnames</span>(tab.diggle) =<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;sigma2 =&quot;</span>, sigma2)</a>
-<a class="sourceLine" id="cb4-15" title="15"><span class="kw">rownames</span>(tab.diggle) =<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;rho =&quot;</span>, rho)</a>
-<a class="sourceLine" id="cb4-16" title="16">tab.diggle</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">3</span> <span class="co"># visits</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>tab.diggle <span class="ot">=</span> <span class="fu">outer</span>(rho, sigma2, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Vectorize</span>(<span class="cf">function</span>(rho, sigma2){</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ceiling</span>(<span class="fu">diggle.linear.power</span>(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">d=</span><span class="fl">0.5</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">t=</span>t,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">sigma2=</span>sigma2,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">R=</span>rho,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">alternative=</span><span class="st">&quot;one.sided&quot;</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">power=</span><span class="fl">0.80</span>)<span class="sc">$</span>n[<span class="dv">1</span>])}))</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tab.diggle) <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;sigma2 =&quot;</span>, sigma2)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab.diggle) <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;rho =&quot;</span>, rho)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>tab.diggle</span></code></pre></div>
 <pre><code>          sigma2 = 100 sigma2 = 200 sigma2 = 300
 rho = 0.2          313          625          938
 rho = 0.5          196          391          586
 rho = 0.8           79          157          235</code></pre>
 <p>or via the  function:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">u =<span class="st"> </span><span class="kw">list</span>(<span class="dt">u1 =</span> t, <span class="dt">u2 =</span> <span class="kw">rep</span>(<span class="dv">0</span>,n))</a>
-<a class="sourceLine" id="cb6-2" title="2">v =<span class="st"> </span><span class="kw">list</span>(<span class="dt">v1 =</span> <span class="kw">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</a>
-<a class="sourceLine" id="cb6-3" title="3">         <span class="dt">v2 =</span> <span class="kw">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </a>
-<a class="sourceLine" id="cb6-4" title="4">tab.ll =<span class="st"> </span><span class="kw">outer</span>(rho, sigma2, </a>
-<a class="sourceLine" id="cb6-5" title="5">      <span class="kw">Vectorize</span>(<span class="cf">function</span>(rho, sigma2){</a>
-<a class="sourceLine" id="cb6-6" title="6">        <span class="kw">ceiling</span>(<span class="kw">liu.liang.linear.power</span>(</a>
-<a class="sourceLine" id="cb6-7" title="7">          <span class="dt">delta=</span><span class="fl">0.5</span>, <span class="dt">u=</span>u, <span class="dt">v=</span>v,</a>
-<a class="sourceLine" id="cb6-8" title="8">          <span class="dt">sigma2=</span>sigma2,</a>
-<a class="sourceLine" id="cb6-9" title="9">          <span class="dt">R=</span>rho, <span class="dt">alternative=</span><span class="st">&quot;one.sided&quot;</span>,</a>
-<a class="sourceLine" id="cb6-10" title="10">          <span class="dt">power=</span><span class="fl">0.80</span>)<span class="op">$</span>n[<span class="dv">1</span>])}))</a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="kw">colnames</span>(tab.ll) =<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;sigma2 =&quot;</span>, sigma2)</a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="kw">rownames</span>(tab.ll) =<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;rho =&quot;</span>, rho)</a>
-<a class="sourceLine" id="cb6-13" title="13">tab.ll</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">u1 =</span> t, <span class="at">u2 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,n))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">v1 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">v2 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>tab.ll <span class="ot">&lt;-</span> <span class="fu">outer</span>(rho, sigma2, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Vectorize</span>(<span class="cf">function</span>(rho, sigma2){</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ceiling</span>(<span class="fu">liu.liang.linear.power</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">delta=</span><span class="fl">0.5</span>, <span class="at">u=</span>u, <span class="at">v=</span>v,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">sigma2=</span>sigma2,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">R=</span>rho, <span class="at">alternative=</span><span class="st">&quot;one.sided&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">power=</span><span class="fl">0.80</span>)<span class="sc">$</span>n[<span class="dv">1</span>])}))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tab.ll) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;sigma2 =&quot;</span>, sigma2)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab.ll) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;rho =&quot;</span>, rho)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>tab.ll</span></code></pre></div>
 <pre><code>          sigma2 = 100 sigma2 = 200 sigma2 = 300
 rho = 0.2          313          625          938
 rho = 0.5          196          391          586
 rho = 0.8           79          157          235</code></pre>
 <p>As a second example, consider an Alzheimer’s disease trial in which assessments are taken every three months for 18 months (7 visits). We assume an smallest detectable effect size of 1.5 points on the cognitive portion of the Alzheimer’s Disease Assessment Scale (ADAS-Cog). This is a 70 point scale with great variability among sick individuals. We assume the random intercept to have a variance of 55, the random slope to have a variance of 24, and a residual variance of 10. The correlation between random slope term and random intercept term is 0.8. We can estimate the necessary sample size by first generating the correlation structure. Since <span class="math inline">\(\varepsilon = \mathrm{var}(Y_{ij})\)</span> is not constant over time in this model, we fix  and set  equal to the covariance matrix for <span class="math inline">\(\mathbf{\varepsilon_i}\)</span>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># var of random intercept</span></a>
-<a class="sourceLine" id="cb8-2" title="2">sig2.i =<span class="st"> </span><span class="dv">55</span></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="co"># var of random slope</span></a>
-<a class="sourceLine" id="cb8-4" title="4">sig2.s =<span class="st"> </span><span class="dv">24</span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="co"># residual var</span></a>
-<a class="sourceLine" id="cb8-6" title="6">sig2.e =<span class="st"> </span><span class="dv">10</span></a>
-<a class="sourceLine" id="cb8-7" title="7"><span class="co"># covariance of slope and intercep</span></a>
-<a class="sourceLine" id="cb8-8" title="8">cov.s.i &lt;-<span class="st"> </span><span class="fl">0.8</span><span class="op">*</span><span class="kw">sqrt</span>(sig2.i)<span class="op">*</span><span class="kw">sqrt</span>(sig2.s)</a>
-<a class="sourceLine" id="cb8-9" title="9"></a>
-<a class="sourceLine" id="cb8-10" title="10">cov.t &lt;-<span class="st"> </span><span class="cf">function</span>(t1, t2, sig2.i, sig2.s, cov.s.i){</a>
-<a class="sourceLine" id="cb8-11" title="11">        sig2.i <span class="op">+</span><span class="st"> </span>t1<span class="op">*</span>t2<span class="op">*</span>sig2.s <span class="op">+</span><span class="st"> </span>(t1<span class="op">+</span>t2)<span class="op">*</span>cov.s.i </a>
-<a class="sourceLine" id="cb8-12" title="12">}</a>
-<a class="sourceLine" id="cb8-13" title="13"></a>
-<a class="sourceLine" id="cb8-14" title="14">t =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="fl">1.5</span>,<span class="fl">0.25</span>)</a>
-<a class="sourceLine" id="cb8-15" title="15">n =<span class="st"> </span><span class="kw">length</span>(t)</a>
-<a class="sourceLine" id="cb8-16" title="16">R =<span class="st"> </span><span class="kw">outer</span>(t, t, <span class="cf">function</span>(x,y){<span class="kw">cov.t</span>(x,y, sig2.i, sig2.s, cov.s.i)})</a>
-<a class="sourceLine" id="cb8-17" title="17">R =<span class="st"> </span>R <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(sig2.e, n, n)</a>
-<a class="sourceLine" id="cb8-18" title="18">u =<span class="st"> </span><span class="kw">list</span>(<span class="dt">u1 =</span> t, <span class="dt">u2 =</span> <span class="kw">rep</span>(<span class="dv">0</span>,n))</a>
-<a class="sourceLine" id="cb8-19" title="19">v =<span class="st"> </span><span class="kw">list</span>(<span class="dt">v1 =</span> <span class="kw">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</a>
-<a class="sourceLine" id="cb8-20" title="20">         <span class="dt">v2 =</span> <span class="kw">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </a>
-<a class="sourceLine" id="cb8-21" title="21"></a>
-<a class="sourceLine" id="cb8-22" title="22"><span class="kw">liu.liang.linear.power</span>(<span class="dt">d=</span><span class="fl">1.5</span>, <span class="dt">u=</span>u, <span class="dt">v=</span>v, <span class="dt">R=</span>R, <span class="dt">sig.level=</span><span class="fl">0.05</span>, <span class="dt">power=</span><span class="fl">0.80</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># var of random intercept</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sig2.i <span class="ot">&lt;-</span> <span class="dv">55</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># var of random slope</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>sig2.s <span class="ot">&lt;-</span> <span class="dv">24</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># residual var</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>sig2.e <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance of slope and intercep</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>cov.s.i <span class="ot">&lt;-</span> <span class="fl">0.8</span><span class="sc">*</span><span class="fu">sqrt</span>(sig2.i)<span class="sc">*</span><span class="fu">sqrt</span>(sig2.s)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>cov.t <span class="ot">&lt;-</span> <span class="cf">function</span>(t1, t2, sig2.i, sig2.s, cov.s.i){</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        sig2.i <span class="sc">+</span> t1<span class="sc">*</span>t2<span class="sc">*</span>sig2.s <span class="sc">+</span> (t1<span class="sc">+</span>t2)<span class="sc">*</span>cov.s.i </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="fl">1.5</span>,<span class="fl">0.25</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(t)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">outer</span>(t, t, <span class="cf">function</span>(x,y){<span class="fu">cov.t</span>(x,y, sig2.i, sig2.s, cov.s.i)})</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> R <span class="sc">+</span> <span class="fu">diag</span>(sig2.e, n, n)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">u1 =</span> t, <span class="at">u2 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,n))</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">v1 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">v2 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="fu">liu.liang.linear.power</span>(<span class="at">d=</span><span class="fl">1.5</span>, <span class="at">u=</span>u, <span class="at">v=</span>v, <span class="at">R=</span>R, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.80</span>)</span></code></pre></div>
 <pre><code>
      Longitudinal linear model power calculation (Liu &amp; Liang, 1997) 
 
@@ -508,8 +367,8 @@ t_1 &amp; \ldots &amp; t_n \\
     0 \\ 1
     \end{array}\right).
 \]</span> Executing this for our Alzheimer’s example, we get a sample size of:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">x =<span class="st"> </span>(<span class="kw">rbind</span>(<span class="dv">1</span>,t)<span class="op">%*%</span><span class="kw">solve</span>(R)<span class="op">%*%</span><span class="kw">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb10-2" title="2">x<span class="op">*</span><span class="dv">2</span><span class="op">*</span>(<span class="kw">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="op">/</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="fl">0.80</span>))<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="fl">1.5</span><span class="op">^</span><span class="dv">2</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> (<span class="fu">rbind</span>(<span class="dv">1</span>,t)<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span><span class="fu">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fl">1.5</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>[1] 0.3592744</code></pre>
 <p>which is clearly wrong. In fact, there is a typo in . The correct formula for <span class="math inline">\(\xi\)</span> is: <span class="math display">\[\begin{equation}\label{eq:diggle3}
 \xi = 
@@ -528,9 +387,10 @@ t_1 &amp; \ldots &amp; t_n \\
   \left(\begin{array}{c}
     0 \\ 1
     \end{array}\right).
-\end{equation}\]</span> Applying the correct formula, we get</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">x =<span class="st"> </span><span class="kw">solve</span>(<span class="kw">rbind</span>(<span class="dv">1</span>,t)<span class="op">%*%</span><span class="kw">solve</span>(R)<span class="op">%*%</span><span class="kw">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb12-2" title="2">x<span class="op">*</span><span class="dv">2</span><span class="op">*</span>(<span class="kw">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="op">/</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="fl">0.80</span>))<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="fl">1.5</span><span class="op">^</span><span class="dv">2</span></a></code></pre></div>
+\end{equation}\]</span></p>
+<p>Applying the correct formula, we get</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">rbind</span>(<span class="dv">1</span>,t)<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span><span class="fu">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fl">1.5</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>[1] 207.3101</code></pre>
 <p>Similarly, using , we attempt to derive the correct closed form formula for this specific linear model. The required sample size per group is given as <span class="math display">\[
 m = \nu/(\psi_1&#39;\tilde\Sigma_1\psi_1)
@@ -560,13 +420,13 @@ R^{-1}
 &amp; = &amp; 
 \sigma^{-2}/2[\mathbf{u}_1R^{-1}\mathbf{u}- \mathbf{u}_1&#39;R^{-1}\mathbf{v}_1X^{-1}\mathbf{v}_1&#39;R^{-1}\mathbf{u}_1]
 \end{eqnarray*}\]</span> Applying this to our working example:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">X =<span class="st"> </span><span class="kw">t</span>(v[[<span class="dv">1</span>]])<span class="op">%*%</span><span class="kw">solve</span>(R)<span class="op">%*%</span>v[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-2" title="2"><span class="st">    </span><span class="kw">t</span>(v[[<span class="dv">2</span>]])<span class="op">%*%</span><span class="kw">solve</span>(R)<span class="op">%*%</span>v[[<span class="dv">2</span>]]</a>
-<a class="sourceLine" id="cb14-3" title="3"></a>
-<a class="sourceLine" id="cb14-4" title="4">Sigma1 =<span class="st"> </span>((<span class="kw">t</span>(u[[<span class="dv">1</span>]])<span class="op">%*%</span><span class="kw">solve</span>(R)<span class="op">%*%</span>t <span class="op">-</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb14-5" title="5"><span class="st">           </span><span class="kw">t</span>(u[[<span class="dv">1</span>]])<span class="op">%*%</span><span class="kw">solve</span>(R)<span class="op">%*%</span>v[[<span class="dv">1</span>]]<span class="op">%*%</span><span class="kw">solve</span>(X)<span class="op">%*%</span><span class="kw">t</span>(v[[<span class="dv">1</span>]])<span class="op">%*%</span><span class="kw">solve</span>(R)<span class="op">%*%</span>t)<span class="op">/</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb14-6" title="6"></a>
-<a class="sourceLine" id="cb14-7" title="7">(<span class="kw">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="op">/</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="fl">0.80</span>))<span class="op">^</span><span class="dv">2</span><span class="op">/</span>(Sigma1<span class="op">*</span>(<span class="fl">1.5</span>)<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">2</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">t</span>(v[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">1</span>]] <span class="sc">+</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t</span>(v[[<span class="dv">2</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">2</span>]]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>Sigma1 <span class="ot">&lt;-</span> ((<span class="fu">t</span>(u[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>t <span class="sc">-</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">t</span>(u[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">1</span>]]<span class="sc">%*%</span><span class="fu">solve</span>(X)<span class="sc">%*%</span><span class="fu">t</span>(v[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>t)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(Sigma1<span class="sc">*</span>(<span class="fl">1.5</span>)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>         [,1]
 [1,] 207.3101</code></pre>
 <!-- ## Example: Ophthalmology -->
@@ -610,19 +470,19 @@ R^{-1}
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
-<h1>References</h1>
-<div id="refs" class="references">
-<div id="ref-diggle">
-<p>Diggle, Peter, Kung-Yee Liang, and Scott L. Zeger. 1994. <em>Analysis of Longitudinal Data</em>. Oxford; New York: Clarendon Press ; Oxford University Press.</p>
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-diggle" class="csl-entry">
+Diggle, Peter, Kung-Yee Liang, and Scott L. Zeger. 1994. <em>Analysis of Longitudinal Data</em>. Oxford; New York: Clarendon Press ; Oxford University Press.
 </div>
-<div id="ref-laird">
-<p>Laird, N. M., and J. H. Ware. 1982. “Random-Effects Models for Longitudinal Data.” <em>Biometrics</em> 38 (4): 963–74.</p>
+<div id="ref-laird" class="csl-entry">
+Laird, N. M., and J. H. Ware. 1982. <span>“Random-Effects Models for Longitudinal Data.”</span> <em>Biometrics</em> 38 (4): 963–74.
 </div>
-<div id="ref-liu">
-<p>Liu, G., and K. Y. Liang. 1997. “Sample Size Calculations for Studies with Correlated Observations.” <em>Biometrics</em> 53 (3): 937–47.</p>
+<div id="ref-liu" class="csl-entry">
+Liu, G., and K. Y. Liang. 1997. <span>“Sample Size Calculations for Studies with Correlated Observations.”</span> <em>Biometrics</em> 53 (3): 937–47.
 </div>
-<div id="ref-zeger">
-<p>Zeger, S. L., and K. Y. Liang. 1986. “Longitudinal Data Analysis for Discrete and Continuous Outcomes.” <em>Biometrics</em> 42 (1): 121–30.</p>
+<div id="ref-zeger" class="csl-entry">
+Zeger, S. L., and K. Y. Liang. 1986. <span>“Longitudinal Data Analysis for Discrete and Continuous Outcomes.”</span> <em>Biometrics</em> 42 (1): 121–30.
 </div>
 </div>
 </div>
