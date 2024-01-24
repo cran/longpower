@@ -12,7 +12,7 @@
 
 <meta name="author" content="Michael C. Donohue" />
 
-<meta name="date" content="2023-01-10" />
+<meta name="date" content="2024-01-23" />
 
 <title>Power for linear models of longitudinal data with applications to Alzheimer’s Disease Phase II study design</title>
 
@@ -121,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -356,7 +363,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Power for linear models of longitudinal
 data with applications to Alzheimer’s Disease Phase II study design</h1>
 <h4 class="author">Michael C. Donohue</h4>
-<h4 class="date">2023-01-10</h4>
+<h4 class="date">2024-01-23</h4>
 
 
 
@@ -480,8 +487,8 @@ probability 1/2 (Group A); and <span class="math inline">\(\mathbf{x}_{i} = \mat
 \mathbf{t}]_{n\times3}\)</span> with probability 1/2 (Group B).</p>
 <p>The Liu and Liang’s formula for linear models can be coded In R
 as:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(longpower)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>liu.liang.linear.power</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(longpower)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>liu.liang.linear.power</span></code></pre></div>
 <pre><code>function (N = NULL, delta = NULL, u = NULL, v = NULL, sigma2 = 1, 
     R = NULL, R.list = NULL, sig.level = 0.05, power = NULL, 
     Pi = rep(1/length(u), length(u)), alternative = c(&quot;two.sided&quot;, 
@@ -553,7 +560,7 @@ as:</p>
         R = R, note = &quot;N is *total* sample size and n is sample size in *each* group&quot;, 
         method = METHOD), class = &quot;power.longtest&quot;)
 }
-&lt;bytecode: 0x7fb137738718&gt;
+&lt;bytecode: 0x119537358&gt;
 &lt;environment: namespace:longpower&gt;</code></pre>
 <p>The parameters include , the effect size (possibly vector); , the
 list of covariate vectors or matrices associated with the parameter of
@@ -564,40 +571,40 @@ correlation structure; and the proportion of covariates of each type (,
 other).</p>
 <p>For example, we can reproduce the table of sample sizes (per group)
 on page 29 of for the given exchangeable correlations with <span class="math inline">\(\mathbf{t} = (0,2,5)&#39;\)</span>, <span class="math inline">\(\alpha=0.05\)</span>, power=0.80, and <span class="math inline">\(d=0.5\)</span> via the function:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">3</span> <span class="co"># visits</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>tab.diggle <span class="ot">=</span> <span class="fu">outer</span>(rho, sigma2, </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Vectorize</span>(<span class="cf">function</span>(rho, sigma2){</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ceiling</span>(<span class="fu">diggle.linear.power</span>(</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">d=</span><span class="fl">0.5</span>,</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">t=</span>t,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">sigma2=</span>sigma2,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">R=</span>rho,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">alternative=</span><span class="st">&quot;one.sided&quot;</span>,</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">power=</span><span class="fl">0.80</span>)<span class="sc">$</span>n[<span class="dv">1</span>])}))</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tab.diggle) <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;sigma2 =&quot;</span>, sigma2)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab.diggle) <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;rho =&quot;</span>, rho)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>tab.diggle</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">3</span> <span class="co"># visits</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>t <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>rho <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>sigma2 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>tab.diggle <span class="ot">=</span> <span class="fu">outer</span>(rho, sigma2, </span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>      <span class="fu">Vectorize</span>(<span class="cf">function</span>(rho, sigma2){</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>        <span class="fu">ceiling</span>(<span class="fu">diggle.linear.power</span>(</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>          <span class="at">d=</span><span class="fl">0.5</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>          <span class="at">t=</span>t,</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>          <span class="at">sigma2=</span>sigma2,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>          <span class="at">R=</span>rho,</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>          <span class="at">alternative=</span><span class="st">&quot;one.sided&quot;</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>          <span class="at">power=</span><span class="fl">0.80</span>)<span class="sc">$</span>n[<span class="dv">1</span>])}))</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="fu">colnames</span>(tab.diggle) <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;sigma2 =&quot;</span>, sigma2)</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="fu">rownames</span>(tab.diggle) <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;rho =&quot;</span>, rho)</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>tab.diggle</span></code></pre></div>
 <pre><code>          sigma2 = 100 sigma2 = 200 sigma2 = 300
 rho = 0.2          313          625          938
 rho = 0.5          196          391          586
 rho = 0.8           79          157          235</code></pre>
 <p>or via the function:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">u1 =</span> t, <span class="at">u2 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,n))</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">v1 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">v2 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>tab.ll <span class="ot">&lt;-</span> <span class="fu">outer</span>(rho, sigma2, </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Vectorize</span>(<span class="cf">function</span>(rho, sigma2){</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ceiling</span>(<span class="fu">liu.liang.linear.power</span>(</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">delta=</span><span class="fl">0.5</span>, <span class="at">u=</span>u, <span class="at">v=</span>v,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">sigma2=</span>sigma2,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">R=</span>rho, <span class="at">alternative=</span><span class="st">&quot;one.sided&quot;</span>,</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">power=</span><span class="fl">0.80</span>)<span class="sc">$</span>n[<span class="dv">1</span>])}))</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tab.ll) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;sigma2 =&quot;</span>, sigma2)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab.ll) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;rho =&quot;</span>, rho)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>tab.ll</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">u1 =</span> t, <span class="at">u2 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,n))</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">v1 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>         <span class="at">v2 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>tab.ll <span class="ot">&lt;-</span> <span class="fu">outer</span>(rho, sigma2, </span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>      <span class="fu">Vectorize</span>(<span class="cf">function</span>(rho, sigma2){</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>        <span class="fu">ceiling</span>(<span class="fu">liu.liang.linear.power</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>          <span class="at">delta=</span><span class="fl">0.5</span>, <span class="at">u=</span>u, <span class="at">v=</span>v,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>          <span class="at">sigma2=</span>sigma2,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>          <span class="at">R=</span>rho, <span class="at">alternative=</span><span class="st">&quot;one.sided&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>          <span class="at">power=</span><span class="fl">0.80</span>)<span class="sc">$</span>n[<span class="dv">1</span>])}))</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">colnames</span>(tab.ll) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;sigma2 =&quot;</span>, sigma2)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="fu">rownames</span>(tab.ll) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;rho =&quot;</span>, rho)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>tab.ll</span></code></pre></div>
 <pre><code>          sigma2 = 100 sigma2 = 200 sigma2 = 300
 rho = 0.2          313          625          938
 rho = 0.5          196          391          586
@@ -614,28 +621,28 @@ estimate the necessary sample size by first generating the correlation
 structure. Since <span class="math inline">\(\varepsilon =
 \mathrm{var}(Y_{ij})\)</span> is not constant over time in this model,
 we fix and set equal to the covariance matrix for <span class="math inline">\(\mathbf{\varepsilon_i}\)</span>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># var of random intercept</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sig2.i <span class="ot">&lt;-</span> <span class="dv">55</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># var of random slope</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>sig2.s <span class="ot">&lt;-</span> <span class="dv">24</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># residual var</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>sig2.e <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance of slope and intercep</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>cov.s.i <span class="ot">&lt;-</span> <span class="fl">0.8</span><span class="sc">*</span><span class="fu">sqrt</span>(sig2.i)<span class="sc">*</span><span class="fu">sqrt</span>(sig2.s)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>cov.t <span class="ot">&lt;-</span> <span class="cf">function</span>(t1, t2, sig2.i, sig2.s, cov.s.i){</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        sig2.i <span class="sc">+</span> t1<span class="sc">*</span>t2<span class="sc">*</span>sig2.s <span class="sc">+</span> (t1<span class="sc">+</span>t2)<span class="sc">*</span>cov.s.i </span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="fl">1.5</span>,<span class="fl">0.25</span>)</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(t)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">outer</span>(t, t, <span class="cf">function</span>(x,y){<span class="fu">cov.t</span>(x,y, sig2.i, sig2.s, cov.s.i)})</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> R <span class="sc">+</span> <span class="fu">diag</span>(sig2.e, n, n)</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">u1 =</span> t, <span class="at">u2 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,n))</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">v1 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">v2 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="fu">liu.liang.linear.power</span>(<span class="at">d=</span><span class="fl">1.5</span>, <span class="at">u=</span>u, <span class="at">v=</span>v, <span class="at">R=</span>R, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.80</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># var of random intercept</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>sig2.i <span class="ot">&lt;-</span> <span class="dv">55</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># var of random slope</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>sig2.s <span class="ot">&lt;-</span> <span class="dv">24</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co"># residual var</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>sig2.e <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co"># covariance of slope and intercep</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>cov.s.i <span class="ot">&lt;-</span> <span class="fl">0.8</span><span class="sc">*</span><span class="fu">sqrt</span>(sig2.i)<span class="sc">*</span><span class="fu">sqrt</span>(sig2.s)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>cov.t <span class="ot">&lt;-</span> <span class="cf">function</span>(t1, t2, sig2.i, sig2.s, cov.s.i){</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>        sig2.i <span class="sc">+</span> t1<span class="sc">*</span>t2<span class="sc">*</span>sig2.s <span class="sc">+</span> (t1<span class="sc">+</span>t2)<span class="sc">*</span>cov.s.i </span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="fl">1.5</span>,<span class="fl">0.25</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(t)</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">outer</span>(t, t, <span class="cf">function</span>(x,y){<span class="fu">cov.t</span>(x,y, sig2.i, sig2.s, cov.s.i)})</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>R <span class="ot">&lt;-</span> R <span class="sc">+</span> <span class="fu">diag</span>(sig2.e, n, n)</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">u1 =</span> t, <span class="at">u2 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,n))</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">v1 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>         <span class="at">v2 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="fu">liu.liang.linear.power</span>(<span class="at">d=</span><span class="fl">1.5</span>, <span class="at">u=</span>u, <span class="at">v=</span>v, <span class="at">R=</span>R, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.80</span>)</span></code></pre></div>
 <pre><code>
      Longitudinal linear model power calculation (Liu &amp; Liang, 1997) 
 
@@ -680,8 +687,8 @@ t_1 &amp; \ldots &amp; t_n \\
     \end{array}\right).
 \]</span> Executing this for our Alzheimer’s example, we get a sample
 size of:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> (<span class="fu">rbind</span>(<span class="dv">1</span>,t)<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span><span class="fu">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fl">1.5</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> (<span class="fu">rbind</span>(<span class="dv">1</span>,t)<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span><span class="fu">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>x<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fl">1.5</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>[1] 0.3592744</code></pre>
 <p>which is clearly wrong. In fact, there is a typo in . The correct
 formula for <span class="math inline">\(\xi\)</span> is: <span class="math display">\[\begin{equation}\label{eq:diggle3}
@@ -703,8 +710,8 @@ formula for <span class="math inline">\(\xi\)</span> is: <span class="math displ
     \end{array}\right).
 \end{equation}\]</span></p>
 <p>Applying the correct formula, we get</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">rbind</span>(<span class="dv">1</span>,t)<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span><span class="fu">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fl">1.5</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">rbind</span>(<span class="dv">1</span>,t)<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span><span class="fu">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>x<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fl">1.5</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>[1] 207.3101</code></pre>
 <p>Similarly, using , we attempt to derive the correct closed form
 formula for this specific linear model. The required sample size per
@@ -747,13 +754,13 @@ R^{-1}
 \sigma^{-2}/2[\mathbf{u}_1R^{-1}\mathbf{u}-
 \mathbf{u}_1&#39;R^{-1}\mathbf{v}_1X^{-1}\mathbf{v}_1&#39;R^{-1}\mathbf{u}_1]
 \end{eqnarray*}\]</span> Applying this to our working example:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">t</span>(v[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">1</span>]] <span class="sc">+</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t</span>(v[[<span class="dv">2</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">2</span>]]</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>Sigma1 <span class="ot">&lt;-</span> ((<span class="fu">t</span>(u[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>t <span class="sc">-</span> </span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">t</span>(u[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">1</span>]]<span class="sc">%*%</span><span class="fu">solve</span>(X)<span class="sc">%*%</span><span class="fu">t</span>(v[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>t)<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(Sigma1<span class="sc">*</span>(<span class="fl">1.5</span>)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">t</span>(v[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">1</span>]] <span class="sc">+</span> </span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>    <span class="fu">t</span>(v[[<span class="dv">2</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">2</span>]]</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>Sigma1 <span class="ot">&lt;-</span> ((<span class="fu">t</span>(u[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>t <span class="sc">-</span> </span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>           <span class="fu">t</span>(u[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>v[[<span class="dv">1</span>]]<span class="sc">%*%</span><span class="fu">solve</span>(X)<span class="sc">%*%</span><span class="fu">t</span>(v[[<span class="dv">1</span>]])<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span>t)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(Sigma1<span class="sc">*</span>(<span class="fl">1.5</span>)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>         [,1]
 [1,] 207.3101</code></pre>
 <!-- ## Example: Ophthalmology -->
