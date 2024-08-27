@@ -12,7 +12,7 @@
 
 <meta name="author" content="Michael C. Donohue" />
 
-<meta name="date" content="2024-01-23" />
+<meta name="date" content="2024-08-26" />
 
 <title>Power for linear models of longitudinal data with applications to Alzheimer’s Disease Phase II study design</title>
 
@@ -363,7 +363,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Power for linear models of longitudinal
 data with applications to Alzheimer’s Disease Phase II study design</h1>
 <h4 class="author">Michael C. Donohue</h4>
-<h4 class="date">2024-01-23</h4>
+<h4 class="date">2024-08-26</h4>
 
 
 
@@ -396,17 +396,19 @@ same cluster, or repeated measures on the same subject, are equally
 correlated. This is exactly equivalent to a random effects model which
 includes a random intercept for each cluster of correlated observations.
 Sample sizes for study designs using these models can be calculated
-using a simple formula such as that in <span class="citation">(Diggle,
-Liang, and Zeger 1994)</span>, page 29. The formula requires the number
+using a simple formula such as that in <span class="citation">Diggle,
+Liang, and Zeger (1994)</span>, page 29. The formula requires the number
 visits, the interval between visits, the estimated model variance (<span class="math inline">\(\sigma^2\)</span>), the within subject correlation
 (<span class="math inline">\(\rho\)</span>), and of course the usual
 sample size calculation inputs (power, significance level, and effect
 size).</p>
-<p>To translate the formula of to the random effects setting, let us
-first consider the details of the assumed error structure of the GEE
-framework. The GEE model assumes that the response for subject <span class="math inline">\(i\)</span> at time <span class="math inline">\(t_{ij}\)</span>, denoted <span class="math inline">\(Y_{ij}\)</span>, is the group mean, dependent on
+<p>To translate the formula of <span class="citation">Diggle, Liang, and
+Zeger (1994)</span> to the random effects setting, let us first consider
+the details of the assumed error structure of the GEE framework. The GEE
+model assumes that the response for subject <span class="math inline">\(i\)</span> at time <span class="math inline">\(t_{ij}\)</span>, denoted <span class="math inline">\(Y_{ij}\)</span>, is the group mean, dependent on
 time and treatment, plus an error term <span class="math inline">\(\varepsilon_{ij}\)</span>. Or, borrowing notation
-from , for group A: <span class="math display">\[
+from <span class="citation">Diggle, Liang, and Zeger (1994)</span>, for
+group A: <span class="math display">\[
 Y_{ij} = \beta_{0A} + \beta_{1A}t_{ij} + \varepsilon_{ij},\quad
 i=1,\ldots,m; j=1,\ldots,n.
 \]</span> and similarly for Group B. The null hypothesis is <span class="math inline">\(H_0: d=\beta_{1A} - \beta_{1B} = 0\)</span>. Under
@@ -426,10 +428,11 @@ The variance of the random intercept, <span class="math inline">\(\mathrm{var}(\
 variance, <span class="math inline">\(\mathrm{var}(\varepsilon_{ij})\)</span>, are
 easily obtainable from the output of mixed effects fitting software so
 that one might fit a random effects model to pilot data to educate a
-power calculation using the GEE formula of . Assuming equal numbers in
-the placebo and active groups, a common visit schedule for all subjects
-(<span class="math inline">\(t_{ij} = t_{kj}\)</span> for all <span class="math inline">\(i,j,k\)</span>), and a random intercept model; the
-number of subjects per group is: <span class="math display">\[
+power calculation using the GEE formula of <span class="citation">Diggle, Liang, and Zeger (1994)</span>. Assuming equal
+numbers in the placebo and active groups, a common visit schedule for
+all subjects (<span class="math inline">\(t_{ij} = t_{kj}\)</span> for
+all <span class="math inline">\(i,j,k\)</span>), and a random intercept
+model; the number of subjects per group is: <span class="math display">\[
 m = \frac{2(z_\alpha + z_Q)^2(\mathrm{var}(\alpha_i) +
 \mathrm{var}(\varepsilon_{ij}^*))^2(1-\mathrm{var}(\alpha_i)/\sigma^2)}{ns_x^2d^2}
 \]</span> where <span class="math inline">\(z_p\)</span> is the <span class="math inline">\(p\)</span>th standard normal quantile, <span class="math inline">\(Q\)</span> is <span class="math inline">\(1-P\)</span>, <span class="math inline">\(P\)</span> is the specified power, and <span class="math inline">\(s_x^2=n^{-1}\sum_j(t_{j}-\bar x)^2\)</span>.</p>
@@ -461,10 +464,12 @@ is of the form: <span class="math display">\[
 (t_{j}+t_{k})\mathrm{cov}(\alpha_{0},\alpha_{1}))]_{jk}+{\rm
 diag}(\mathrm{var}(\varepsilon^*_j))
 \]</span> With this specification of the covariance matrix, one can use
-the sample size formula of for linear GEE models (page 941). (Warning:
-The formula given on the bottom page 29 of for general correlation
-matrices, <span class="math inline">\(R\)</span>, is wrong).</p>
-<p>The formula for linear models provided by is useful for testing <span class="math inline">\(H_0: \mathbf{\psi=0}\)</span> for any linear model
+the sample size formula of <span class="citation">Liu and Liang
+(1997)</span> for linear GEE models (page 941). (Warning: The formula
+given on the bottom page 29 of <span class="citation">Diggle, Liang, and
+Zeger (1994)</span> for general correlation matrices, <span class="math inline">\(R\)</span>, is wrong).</p>
+<p>The formula for linear models provided by <span class="citation">Liu
+and Liang (1997)</span> is useful for testing <span class="math inline">\(H_0: \mathbf{\psi=0}\)</span> for any linear model
 of the form: <span class="math display">\[
 Y_{ij} = \mathbf{x}_{ij}&#39;\mathbf{\psi} +
 \mathbf{z}_{ij}&#39;\mathbf{\lambda} + \varepsilon_{ij}
@@ -560,17 +565,21 @@ as:</p>
         R = R, note = &quot;N is *total* sample size and n is sample size in *each* group&quot;, 
         method = METHOD), class = &quot;power.longtest&quot;)
 }
-&lt;bytecode: 0x119537358&gt;
+&lt;bytecode: 0x1115d84a0&gt;
 &lt;environment: namespace:longpower&gt;</code></pre>
-<p>The parameters include , the effect size (possibly vector); , the
-list of covariate vectors or matrices associated with the parameter of
-interest; , the respective list of covariate vectors or matrices
-associated with the nuisance parameter; , the error variance; , the
-correlation structure; and the proportion of covariates of each type (,
-, and are expected to be the same length and sorted with respect to each
-other).</p>
+<p>The parameters include <code>d</code>, the effect size (possibly
+vector); <code>u</code>, the list of covariate vectors or matrices
+associated with the parameter of interest; <code>v</code>, the
+respective list of covariate vectors or matrices associated with the
+nuisance parameter; <code>sigma2</code>, the error variance;
+<code>R</code>, the correlation structure; and <code>Pi</code> the
+proportion of covariates of each type (<code>u</code>, <code>v</code>,
+and <code>Pi</code> are expected to be the same length and sorted with
+respect to each other).</p>
 <p>For example, we can reproduce the table of sample sizes (per group)
-on page 29 of for the given exchangeable correlations with <span class="math inline">\(\mathbf{t} = (0,2,5)&#39;\)</span>, <span class="math inline">\(\alpha=0.05\)</span>, power=0.80, and <span class="math inline">\(d=0.5\)</span> via the function:</p>
+on page 29 of <span class="citation">Diggle, Liang, and Zeger
+(1994)</span> for the given exchangeable correlations with <span class="math inline">\(\mathbf{t} = (0,2,5)&#39;\)</span>, <span class="math inline">\(\alpha=0.05\)</span>, power=0.80, and <span class="math inline">\(d=0.5\)</span> via the
+<code>diggle.linear.power()</code> function:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">3</span> <span class="co"># visits</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>t <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>rho <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
@@ -591,7 +600,7 @@ on page 29 of for the given exchangeable correlations with <span class="math inl
 rho = 0.2          313          625          938
 rho = 0.5          196          391          586
 rho = 0.8           79          157          235</code></pre>
-<p>or via the function:</p>
+<p>or via the <code>liu.liang.linear.power()</code> function:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">u1 =</span> t, <span class="at">u2 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,n))</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">v1 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">1</span>,t),</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>         <span class="at">v2 =</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="dv">0</span>,t))         </span>
@@ -620,7 +629,8 @@ between random slope term and random intercept term is 0.8. We can
 estimate the necessary sample size by first generating the correlation
 structure. Since <span class="math inline">\(\varepsilon =
 \mathrm{var}(Y_{ij})\)</span> is not constant over time in this model,
-we fix and set equal to the covariance matrix for <span class="math inline">\(\mathbf{\varepsilon_i}\)</span>:</p>
+we fix <code>sigma2=1</code> and set <code>R</code> equal to the
+covariance matrix for <span class="math inline">\(\mathbf{\varepsilon_i}\)</span>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># var of random intercept</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>sig2.i <span class="ot">&lt;-</span> <span class="dv">55</span></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># var of random slope</span></span>
@@ -667,8 +677,10 @@ we fix and set equal to the covariance matrix for <span class="math inline">\(\m
 [7,] 98.59817 114.86453 131.13089 147.39725 163.66361 179.9300 206.19633</code></pre>
 <p>So the study would require about 207 subjects per arm to achieve 80%
 power, with a two-tailed <span class="math inline">\(\alpha=0.05\)</span>.</p>
-<p>The simple formula provided in suggests the required number of
-subjects can be found by <span class="math inline">\(2(z_\alpha+z_Q)^2\xi/d^2\)</span>, where <span class="math display">\[
+<p>The simple formula provided in <span class="citation">Diggle, Liang,
+and Zeger (1994)</span> suggests the required number of subjects can be
+found by <span class="math inline">\(2(z_\alpha+z_Q)^2\xi/d^2\)</span>,
+where <span class="math display">\[
 \xi_\textrm{WRONG}=
   \left(\begin{array}{cc}
     0 &amp; 1\\
@@ -690,7 +702,7 @@ size of:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> (<span class="fu">rbind</span>(<span class="dv">1</span>,t)<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span><span class="fu">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>x<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fl">1.5</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>[1] 0.3592744</code></pre>
-<p>which is clearly wrong. In fact, there is a typo in . The correct
+<p>which is clearly wrong. In fact, there is a typo in <span class="citation">Diggle, Liang, and Zeger (1994)</span>. The correct
 formula for <span class="math inline">\(\xi\)</span> is: <span class="math display">\[\begin{equation}\label{eq:diggle3}
 \xi =
   \left(\begin{array}{cc}
@@ -713,9 +725,9 @@ formula for <span class="math inline">\(\xi\)</span> is: <span class="math displ
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">rbind</span>(<span class="dv">1</span>,t)<span class="sc">%*%</span><span class="fu">solve</span>(R)<span class="sc">%*%</span><span class="fu">cbind</span>(<span class="dv">1</span>,t))[<span class="dv">2</span>,<span class="dv">2</span>]</span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>x<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>(<span class="fu">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.80</span>))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="fl">1.5</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>[1] 207.3101</code></pre>
-<p>Similarly, using , we attempt to derive the correct closed form
-formula for this specific linear model. The required sample size per
-group is given as <span class="math display">\[
+<p>Similarly, using <span class="citation">Liu and Liang (1997)</span>,
+we attempt to derive the correct closed form formula for this specific
+linear model. The required sample size per group is given as <span class="math display">\[
 m = \nu/(\psi_1&#39;\tilde\Sigma_1\psi_1)
 \]</span> where <span class="math display">\[
 \tilde\Sigma_1 =\sigma^{-2}\sum_{l=1}^m\pi_l

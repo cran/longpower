@@ -1,4 +1,4 @@
-76f09296d922d8e045c60123797d8843 *DESCRIPTION
+4e9e344bff22754677d5641d6ce06b18 *DESCRIPTION
 5c85d0d247cf3e7d1d43d94151e5c766 *NAMESPACE
 1c6d8438ad946e0fe2f99964bba9bdc9 *R/diggle.linear.power.R
 b8d65815dcca7bc3ee20902f45f0912c *R/edland.linear.power.R
@@ -8,12 +8,12 @@ b43b77b51119ac60ebe85ebe786d7840 *R/lmmpower.R
 df6cc46bc7fae1a55b713f3d5065b35a *R/longpower-package.R
 377b0d010a142a1c89bb3b49d47607ba *R/power_mmrm.R
 d0ea6a038523d86bc4624eb7b3f9939c *R/print.power.longtest.R
-8faf250d78a120ba4c7ea2186efddd24 *build/partial.rdb
-0427d84f69c5f8ef643a39c5401e0ad2 *build/vignette.rds
+f61db891eb928123aba4412ca322f508 *build/partial.rdb
+2edf0dae22658dbe71ed4d351a2244cd *build/vignette.rds
 5eca20263bd3d776e2fe20f15f727bd9 *inst/CITATION
 cb0b72c4402b6bf674c272628ef8757f *inst/doc/longpower.R
-bc7891a2d4096da3a99e6eeb18a62858 *inst/doc/longpower.Rmd
-b0c1d0bd622d7ea467ecbab4b643b117 *inst/doc/longpower.html
+e2fddd1f95eeaa76df389a98da174a21 *inst/doc/longpower.Rmd
+e7bf8496ddac1593db230b8757c963bb *inst/doc/longpower.html
 2ebde5b6a7bca819e99c7243bbdbed31 *man/diggle.linear.power.Rd
 f51ce2ae6a8b499ddc45f4753e1eedef *man/edland.linear.power.Rd
 d7af18199815af025ec56039e7bf6d29 *man/hu.mackey.thomas.linear.power.Rd
@@ -26,5 +26,5 @@ c5752686d1163ffcc91000bccf1d360d *man/power.mmrm.Rd
 abcb3796174d6222a3ee9c408e2406dc *man/print.power.longtest.Rd
 128cc2bce37f0eee9b987a0babb30fa2 *tests/testthat.R
 655c6813bd2f2fae1a210631ee82332f *tests/testthat/tests.R
-bc7891a2d4096da3a99e6eeb18a62858 *vignettes/longpower.Rmd
+e2fddd1f95eeaa76df389a98da174a21 *vignettes/longpower.Rmd
 dbcc5d1c7df3b3a647f88325d2d91ed3 *vignettes/longpower.bib

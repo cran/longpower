@@ -1,7 +1,7 @@
 Package: longpower
 Type: Package
 Title: Sample Size Calculations for Longitudinal Data
-Version: 1.0.25
+Version: 1.0.26
 Authors@R: c(
   person(c("Michael", "C."), "Donohue", email = "mdonohue@usc.edu", role = c("aut", "cre")),
   person(c("Steve", "D."), "Edland", email = "sedland@health.ucsd.edu", role = "ctb"),
@@ -27,10 +27,10 @@ Collate: 'longpower-package.R' 'diggle.linear.power.R'
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 NeedsCompilation: no
-Packaged: 2024-01-24 00:27:07 UTC; mdonohue
+Packaged: 2024-08-27 01:41:41 UTC; mdonohue
 Author: Michael C. Donohue [aut, cre],
   Steve D. Edland [ctb],
   Nan Hu [ctb]
 Maintainer: Michael C. Donohue <mdonohue@usc.edu>
 Repository: CRAN
-Date/Publication: 2024-01-24 04:40:06 UTC
+Date/Publication: 2024-08-27 04:40:02 UTC
